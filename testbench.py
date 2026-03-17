@@ -22,15 +22,44 @@ def play_game(heur0, heur1, starting_player, depth=6, verbose=False):
 
     return game.get_winner()
 
-
 def run_tournament(depth=6, verbose=False):
     heuristics = [str(i) for i in range(5)]
+    # Track wins per heuristic: stats[heuristic_id] = win count
+    heuristic_names = ['more_balls_in_pits', 'mobility', 'extra_turn_potential', 'capture_potential', 'weighted_pit_value']
+    stats = {str(i): 0 for i in range(5)}
+    ties = 0
 
-    for h0 in heuristics:
-        for h1 in heuristics:
+    for i in range(len(heuristics)):
+        for j in range(i + 1, len(heuristics)):  # Only play each unique pair once
+            h0 = heuristics[i]
+            h1 = heuristics[j]
+                
             winner0 = play_game(h0, h1, starting_player=0, depth=depth, verbose=verbose)
             winner1 = play_game(h0, h1, starting_player=1, depth=depth, verbose=verbose)
-            print(f"h0={h0} vs h1={h1}: start0→{winner0}, start1→{winner1}")
+            
+            # Game 1: Player 0 (h0) vs Player 1 (h1), starting with Player 0
+            if winner0 == 0:
+                stats[h0] += 1  # h0 won
+            elif winner0 == 1:
+                stats[h1] += 1  # h1 won
+            elif winner0 == -1:
+                ties += 1  # tie
+            
+            # Game 2: Player 0 (h0) vs Player 1 (h1), starting with Player 1
+            if winner1 == 0:
+                stats[h0] += 1  # h0 won (Player 0 uses h0)
+            elif winner1 == 1:
+                stats[h1] += 1  # h1 won (Player 1 uses h1)
+            elif winner1 == -1:
+                ties += 1  # tie
+            
+            print(f"h{h0} vs h{h1}: start 0 → wins {winner0}, start 1 → wins {winner1}")
+
+    print(f"\n--- Heuristic Win Summary ---")
+    for h_id, wins in stats.items():
+        print(f"Heuristic {h_id} ({heuristic_names[int(h_id)]}): {wins} wins")
+    print(f"Ties: {ties}")
+    print(f"Total games: {sum(stats.values()) + ties}")
 
 
 if __name__ == "__main__":

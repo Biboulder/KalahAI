@@ -3,11 +3,12 @@ from minimax import minimax
 
 if __name__ == "__main__":
     AI_PLAYER = 1
+    heuristic_val = "0"  # Use the 'more_balls_in_pits' heuristic
     game = Kalah()
     print(game)
     while not game.is_game_over(game.board):
         if game.current_player == AI_PLAYER:
-            _, pit = minimax(game, game.board, game.current_player, depth=6, ai_player=AI_PLAYER)
+            _, pit = minimax(game, game.board, game.current_player, depth=6, ai_player=AI_PLAYER, heuristic_val=heuristic_val)
             print(f"AI plays pit {pit}")
             game.move(pit)
             print(game)
