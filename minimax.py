@@ -1,15 +1,15 @@
 import math
 
-def minimax(game, board, player, depth, ai_player, alpha=-math.inf, beta=math.inf):
+def minimax(game, board, player, depth, ai_player, heuristic_val, alpha=-math.inf, beta=math.inf):
     if game.is_game_over(board) or depth == 0:
-        return game.heuristic(board, ai_player), None
+        return game.heuristic(board, ai_player, heuristic_val), None
 
     best_move = None
     if player == ai_player:
         best_val = -math.inf
         for pit in game.get_actions(board, player):
             new_board, new_player = game.apply_move(board, player, pit)
-            val, _ = minimax(game, new_board, new_player, depth-1, ai_player, alpha, beta)
+            val, _ = minimax(game, new_board, new_player, depth-1, ai_player, heuristic_val, alpha, beta)
             if val > best_val:
                 best_val, best_move = val, pit
             alpha = max(alpha, best_val)
@@ -20,7 +20,7 @@ def minimax(game, board, player, depth, ai_player, alpha=-math.inf, beta=math.in
         best_val = math.inf
         for pit in game.get_actions(board, player):
             new_board, new_player = game.apply_move(board, player, pit)
-            val, _ = minimax(game, new_board, new_player, depth-1, ai_player, alpha, beta)
+            val, _ = minimax(game, new_board, new_player, depth-1, ai_player, heuristic_val, alpha, beta)
             if val < best_val:
                 best_val, best_move = val, pit
             beta = min(beta, best_val)

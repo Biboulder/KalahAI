@@ -80,43 +80,79 @@ class Kalah:
         start = 0 if player == 0 else 7
         return [i for i in range(6) if board[start + i] > 0]
     
-    # easy heuristic that only checks how many balls in the kalah
-    # more implementations:
-    # - possibility of extra turn
-    # - possibility to capture opponents beans
-    # - pit distribution -> more balls in different pits is better -> more moves
-    # - beans close to kalah are more valuable
-    # - count the opponents captures in the next turn
-    def heuristic(self, board, ai_player):
+    # --- Heuristics ---
+    # These are simple evaluation functions for an AI player.
+    # Each heuristic returns a higher value for positions that are better for `ai_player`.
+    # The heuristic selector in `heuristic()` chooses which one to use.
+    def more_balls_in_pits(self, board, ai_player):
+        """Heuristic 0: difference in store stones."""
         if ai_player == 0:
             return board[6] - board[13]
         else:
             return board[13] - board[6]
 
+    def mobility(self, board, ai_player):
+        """Heuristic 1: number of legal moves (mobility) difference."""
+        own_moves = len(self.get_actions(board, ai_player))
+        opp_moves = len(self.get_actions(board, 1 - ai_player))
+        return own_moves - opp_moves
+
+    def extra_turn_potential(self, board, ai_player):
+        """Heuristic 2: how many moves would grant an extra turn."""
+        count = 0
+        for pit in self.get_actions(board, ai_player):
+            new_board, new_player = self.apply_move(board, ai_player, pit)
+            if new_player == ai_player:
+                count += 1
+        return count
+
+    def capture_potential(self, board, ai_player):
+        """Heuristic 3: how many moves would result in a capture."""
+        store_index = 6 if ai_player == 0 else 13
+        base_store = board[store_index]
+        captures = 0
+        for pit in self.get_actions(board, ai_player):
+            new_board, _ = self.apply_move(board, ai_player, pit)
+            if new_board[store_index] - base_store > 1:
+                captures += 1
+        return captures
+
+    def weighted_pit_value(self, board, ai_player):
+        """Heuristic 4: give more value to stones closer to the player's store."""
+        if ai_player == 0:
+            own_range = range(6)
+            opp_range = range(7, 13)
+        else:
+            own_range = range(7, 13)
+            opp_range = range(6)
+
+        def weighted_sum(pits, weights):
+            return sum(stones * weight for stones, weight in zip(pits, weights))
+
+        # For own pits, give higher weight to pits closer to the store.
+        own_weights = list(range(1, 7)) if ai_player == 0 else list(range(6, 0, -1))
+        opp_weights = list(reversed(own_weights))
+
+        own_score = weighted_sum([board[i] for i in own_range], own_weights)
+        opp_score = weighted_sum([board[i] for i in opp_range], opp_weights)
+        return own_score - opp_score
+
+    def heuristic(self, board, ai_player, val):
+        val = str(val)
+        match val:
+            case "0":
+                return self.more_balls_in_pits(board, ai_player)
+            case "1":
+                return self.mobility(board, ai_player)
+            case "2":
+                return self.extra_turn_potential(board, ai_player)
+            case "3":
+                return self.capture_potential(board, ai_player)
+            case "4":
+                return self.weighted_pit_value(board, ai_player)
+            case _:
+                raise ValueError(f"Unknown heuristic value: {val}")
+
     def __str__(self): 
         return f"AI: {self.board[13]} | {' '.join(map(str, self.board[7:13]))} | YOU: {self.board[6]} | {' '.join(map(str, self.board[:6]))}"
-    
-# Example usage
-if __name__ == "__main__":
-    AI_PLAYER = 1
-    game = Kalah()
-    print(game)
-    while not game.is_game_over(game.board):
-        if game.current_player == AI_PLAYER:
-            _, pit = minimax(game, game.board, game.current_player, depth=6, ai_player=AI_PLAYER)
-            print(f"AI plays pit {pit}")
-            game.move(pit)
-            print(game)
-        try:
-            pit_index = int(input(f"Select a pit (0-5): "))
-            game.move(pit_index)
-            print(game)
-        except ValueError as e:
-            print(e)
-    
-    winner = game.get_winner()
-    if winner == -1:
-        print("The game is a tie!")
-    else:
-        print(f"Player {winner} wins!")
 
