@@ -98,13 +98,23 @@ class Kalah:
         return own_moves - opp_moves
 
     def extra_turn_potential(self, board, ai_player):
-        """Heuristic 2: how many moves would grant an extra turn."""
-        count = 0
+        """Heuristic 2: how many moves would grant an extra turn - opponent getting extra turns"""
+        opponent = 1 - ai_player
+
+        # Count legal moves that keep the turn (last seed lands in own store).
+        ai_extra_turns = 0
         for pit in self.get_actions(board, ai_player):
-            new_board, new_player = self.apply_move(board, ai_player, pit)
-            if new_player == ai_player:
-                count += 1
-        return count
+            _, next_player = self.apply_move(board, ai_player, pit)
+            if next_player == ai_player:
+                ai_extra_turns = ai_extra_turns + 1
+
+        opp_extra_turns = 0
+        for pit in self.get_actions(board, opponent):
+            _, next_player = self.apply_move(board, opponent, pit)
+            if next_player == opponent:
+                opp_extra_turns = opp_extra_turns + 1
+
+        return ai_extra_turns - opp_extra_turns
 
     def capture_potential(self, board, ai_player):
         """Heuristic 3: how many moves would result in a capture."""
@@ -152,24 +162,6 @@ class Kalah:
                 return self.weighted_pit_value(board, ai_player)
             case _:
                 raise ValueError(f"Unknown heuristic value: {val}")
-
-    def heuristic_extra_turn(self, board, ai_player):
-        opponent = 1 - ai_player
-
-        # Count legal moves that keep the turn (last seed lands in own store).
-        ai_extra_turns = 0
-        for pit in self.get_actions(board, ai_player):
-            _, next_player = self.apply_move(board, ai_player, pit)
-            if next_player == ai_player:
-                ai_extra_turns = ai_extra_turns + 1
-
-        opp_extra_turns = 0
-        for pit in self.get_actions(board, opponent):
-            _, next_player = self.apply_move(board, opponent, pit)
-            if next_player == opponent:
-                opp_extra_turns = opp_extra_turns + 1
-
-        return ai_extra_turns - opp_extra_turns
     
     def __str__(self): 
         return f"AI: {self.board[13]} | {' '.join(map(str, self.board[7:13]))} | YOU: {self.board[6]} | {' '.join(map(str, self.board[:6]))}"
