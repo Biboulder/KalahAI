@@ -41,12 +41,19 @@ class Kalah:
                 new_board[6 if new_player == 0 else 13] += new_board[opposite_index] + 1
                 new_board[index] = 0
                 new_board[opposite_index] = 0
-
         # Check for extra turn
         if (new_player == 0 and index == 6) or (new_player == 1 and index == 13):
             pass  # Player gets an extra turn
         else:
             new_player = 1 - new_player  # Switch players
+
+         # End-of-game sweep
+        if all(b == 0 for b in new_board[:6]) or all(b == 0 for b in new_board[7:13]):
+            for i in range(6):
+                new_board[6]  += new_board[i]
+                new_board[i]   = 0
+                new_board[13] += new_board[7 + i]
+                new_board[7+i] = 0
 
         return new_board, new_player
     
@@ -60,16 +67,14 @@ class Kalah:
         return all(b == 0 for b in board[:6]) or all(b == 0 for b in board[7:13])
     
     def get_winner(self):
-        if not self.is_game_over():
-            return None  # Game is not over yet
-        player0_score = self.board[6] + sum(self.board[:6])
-        player1_score = self.board[13] + sum(self.board[7:13])
-        if player0_score > player1_score:
-            return 0  # Player 0 wins
-        elif player1_score > player0_score:
-            return 1  # Player 1 wins
+        if not self.is_game_over(self.board):
+            return None
+        if self.board[6] > self.board[13]:
+            return 0
+        elif self.board[13] > self.board[6]:
+            return 1
         else:
-            return -1  # It's a tie
+            return -1
         
     def get_actions(self, board, player):
         start = 0 if player == 0 else 7
