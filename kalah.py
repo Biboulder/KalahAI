@@ -88,6 +88,24 @@ class Kalah:
         else:
             return board[13] - board[6]
 
+    def heuristic_extra_turn(self, board, ai_player):
+        opponent = 1 - ai_player
+
+        # Count legal moves that keep the turn (last seed lands in own store).
+        ai_extra_turns = 0
+        for pit in self.get_actions(board, ai_player):
+            _, next_player = self.apply_move(board, ai_player, pit)
+            if next_player == ai_player:
+                ai_extra_turns = ai_extra_turns + 1
+
+        opp_extra_turns = 0
+        for pit in self.get_actions(board, opponent):
+            _, next_player = self.apply_move(board, opponent, pit)
+            if next_player == opponent:
+                opp_extra_turns = opp_extra_turns + 1
+
+        return ai_extra_turns - opp_extra_turns
+    
     def __str__(self): 
         return f"AI: {self.board[13]} | {' '.join(map(str, self.board[7:13]))} | YOU: {self.board[6]} | {' '.join(map(str, self.board[:6]))}"
     
