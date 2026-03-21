@@ -146,6 +146,17 @@ class Kalah:
         own_score = weighted_sum([board[i] for i in own_range], own_weights)
         opp_score = weighted_sum([board[i] for i in opp_range], opp_weights)
         return own_score - opp_score
+    
+    def combine_heuristics(self, board, ai_player):
+        """Example of combining multiple heuristics into a single evaluation."""
+        h0 = self.more_balls_in_pits(board, ai_player)
+        h1 = self.mobility(board, ai_player)
+        h2 = self.extra_turn_potential(board, ai_player)
+        h3 = self.capture_potential(board, ai_player)
+        h4 = self.weighted_pit_value(board, ai_player)
+
+        # Simple weighted sum of heuristics (weights can be tuned).
+        return 0.4 * h0 + 0.15 * h1 + 0.1 * h2 + 0.1 * h3 + 0.25 * h4
 
     def heuristic(self, board, ai_player, val):
         val = str(val)
@@ -160,6 +171,8 @@ class Kalah:
                 return self.capture_potential(board, ai_player)
             case "4":
                 return self.weighted_pit_value(board, ai_player)
+            case "combined":
+                return self.combine_heuristics(board, ai_player)
             case _:
                 raise ValueError(f"Unknown heuristic value: {val}")
     
