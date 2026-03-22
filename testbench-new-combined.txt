@@ -1,0 +1,232 @@
+Running heuristics tournament (5x5) with 2 games per pair...
+
+=== Tournament at Depth 4 ===
+h0 vs h1: start 0 → wins 1, start 1 → wins 0
+h0 vs h2: start 0 → wins 0, start 1 → wins 0
+h0 vs h3: start 0 → wins 0, start 1 → wins 0
+h0 vs h4: start 0 → wins 0, start 1 → wins 1
+h1 vs h2: start 0 → wins 0, start 1 → wins 1
+h1 vs h3: start 0 → wins 0, start 1 → wins -1
+h1 vs h4: start 0 → wins 1, start 1 → wins 1
+h2 vs h3: start 0 → wins 1, start 1 → wins 1
+h2 vs h4: start 0 → wins 0, start 1 → wins -1
+h3 vs h4: start 0 → wins 1, start 1 → wins 1
+
+--- Heuristic Win Summary ---
+Heuristic 0 (more_balls_in_pits): 6 wins
+Heuristic 1 (mobility): 3 wins
+Heuristic 2 (extra_turn_potential): 2 wins
+Heuristic 3 (capture_potential): 2 wins
+Heuristic 4 (weighted_pit_value): 5 wins
+Ties: 2
+Total games: 20
+
+Now testing combined weighted heuristic against each individual heuristic...
+Combined vs h0: start 0 → wins 1, start 1 → wins 0
+Combined vs h1: start 0 → wins 0, start 1 → wins 0
+Combined vs h2: start 0 → wins 0, start 1 → wins 0
+Combined vs h3: start 0 → wins 0, start 1 → wins 0
+Combined vs h4: start 0 → wins 0, start 1 → wins 0
+
+--- Performance with Combined Heuristic ---
+Heuristic 0 (more_balls_in_pits): 1 wins
+Heuristic 1 (mobility): 0 wins
+Heuristic 2 (extra_turn_potential): 0 wins
+Heuristic 3 (capture_potential): 0 wins
+Heuristic 4 (weighted_pit_value): 0 wins
+Heuristic combined (combined): 9 wins
+Ties: 0
+Total games: 10
+
+=== Tournament at Depth 6 ===
+h0 vs h1: start 0 → wins 0, start 1 → wins 0
+h0 vs h2: start 0 → wins 0, start 1 → wins 0
+h0 vs h3: start 0 → wins 0, start 1 → wins 0
+h0 vs h4: start 0 → wins 0, start 1 → wins 0
+h1 vs h2: start 0 → wins 0, start 1 → wins 1
+h1 vs h3: start 0 → wins 1, start 1 → wins 0
+h1 vs h4: start 0 → wins 1, start 1 → wins 0
+h2 vs h3: start 0 → wins 1, start 1 → wins 0
+h2 vs h4: start 0 → wins 1, start 1 → wins 1
+h3 vs h4: start 0 → wins 1, start 1 → wins 1
+
+--- Heuristic Win Summary ---
+Heuristic 0 (more_balls_in_pits): 8 wins
+Heuristic 1 (mobility): 3 wins
+Heuristic 2 (extra_turn_potential): 2 wins
+Heuristic 3 (capture_potential): 2 wins
+Heuristic 4 (weighted_pit_value): 5 wins
+Ties: 0
+Total games: 20
+
+Now testing combined weighted heuristic against each individual heuristic...
+Combined vs h0: start 0 → wins 1, start 1 → wins 0
+Combined vs h1: start 0 → wins 0, start 1 → wins 0
+Combined vs h2: start 0 → wins 0, start 1 → wins 0
+Combined vs h3: start 0 → wins 0, start 1 → wins 0
+Combined vs h4: start 0 → wins 0, start 1 → wins 0
+
+--- Performance with Combined Heuristic ---
+Heuristic 0 (more_balls_in_pits): 1 wins
+Heuristic 1 (mobility): 0 wins
+Heuristic 2 (extra_turn_potential): 0 wins
+Heuristic 3 (capture_potential): 0 wins
+Heuristic 4 (weighted_pit_value): 0 wins
+Heuristic combined (combined): 9 wins
+Ties: 0
+Total games: 10
+
+=== Tournament at Depth 8 ===
+h0 vs h1: start 0 → wins 0, start 1 → wins 0
+h0 vs h2: start 0 → wins 0, start 1 → wins 0
+h0 vs h3: start 0 → wins 0, start 1 → wins 0
+h0 vs h4: start 0 → wins 0, start 1 → wins 0
+h1 vs h2: start 0 → wins 1, start 1 → wins 1
+h1 vs h3: start 0 → wins 1, start 1 → wins 0
+h1 vs h4: start 0 → wins 1, start 1 → wins 1
+h2 vs h3: start 0 → wins 1, start 1 → wins 1
+h2 vs h4: start 0 → wins 1, start 1 → wins 0
+h3 vs h4: start 0 → wins 0, start 1 → wins 1
+
+--- Heuristic Win Summary ---
+Heuristic 0 (more_balls_in_pits): 8 wins
+Heuristic 1 (mobility): 1 wins
+Heuristic 2 (extra_turn_potential): 3 wins
+Heuristic 3 (capture_potential): 4 wins
+Heuristic 4 (weighted_pit_value): 4 wins
+Ties: 0
+Total games: 20
+
+Now testing combined weighted heuristic against each individual heuristic...
+Combined vs h0: start 0 → wins 0, start 1 → wins 1
+Combined vs h1: start 0 → wins 0, start 1 → wins 0
+Combined vs h2: start 0 → wins 0, start 1 → wins 0
+Combined vs h3: start 0 → wins 0, start 1 → wins 0
+Combined vs h4: start 0 → wins 0, start 1 → wins 0
+
+--- Performance with Combined Heuristic ---
+Heuristic 0 (more_balls_in_pits): 1 wins
+Heuristic 1 (mobility): 0 wins
+Heuristic 2 (extra_turn_potential): 0 wins
+Heuristic 3 (capture_potential): 0 wins
+Heuristic 4 (weighted_pit_value): 0 wins
+Heuristic combined (combined): 9 wins
+Ties: 0
+Total games: 10
+
+=== Tournament at Depth 10 ===
+h0 vs h1: start 0 → wins 0, start 1 → wins 1
+h0 vs h2: start 0 → wins 0, start 1 → wins 0
+h0 vs h4: start 0 → wins 0, start 1 → wins 0
+h1 vs h2: start 0 → wins 1, start 1 → wins 0
+h1 vs h3: start 0 → wins 1, start 1 → wins 0
+h1 vs h4: start 0 → wins 1, start 1 → wins 1
+h2 vs h3: start 0 → wins 1, start 1 → wins 0
+h2 vs h4: start 0 → wins 0, start 1 → wins -1
+h3 vs h4: start 0 → wins 0, start 1 → wins 1
+
+--- Heuristic Win Summary ---
+Heuristic 0 (more_balls_in_pits): 7 wins
+Heuristic 1 (mobility): 3 wins
+Heuristic 2 (extra_turn_potential): 3 wins
+Heuristic 3 (capture_potential): 3 wins
+Heuristic 4 (weighted_pit_value): 3 wins
+Ties: 1
+Total games: 20
+
+Now testing combined weighted heuristic against each individual heuristic...
+Combined vs h0: start 0 → wins 0, start 1 → wins 1
+h0 vs h4: start 0 → wins 0, start 1 → wins 0
+h1 vs h2: start 0 → wins 1, start 1 → wins 0
+h1 vs h3: start 0 → wins 1, start 1 → wins 0
+h1 vs h4: start 0 → wins 1, start 1 → wins 1
+h2 vs h3: start 0 → wins 1, start 1 → wins 0
+h2 vs h4: start 0 → wins 0, start 1 → wins -1
+h3 vs h4: start 0 → wins 0, start 1 → wins 1
+
+--- Heuristic Win Summary ---
+Heuristic 0 (more_balls_in_pits): 7 wins
+Heuristic 1 (mobility): 3 wins
+Heuristic 2 (extra_turn_potential): 3 wins
+Heuristic 3 (capture_potential): 3 wins
+Heuristic 4 (weighted_pit_value): 3 wins
+Ties: 1
+Total games: 20
+
+Now testing combined weighted heuristic against each individual heuristic...
+Combined vs h0: start 0 → wins 0, start 1 → wins 1
+Combined vs h1: start 0 → wins 0, start 1 → wins 0
+h1 vs h4: start 0 → wins 1, start 1 → wins 1
+h2 vs h3: start 0 → wins 1, start 1 → wins 0
+h2 vs h4: start 0 → wins 0, start 1 → wins -1
+h3 vs h4: start 0 → wins 0, start 1 → wins 1
+
+--- Heuristic Win Summary ---
+Heuristic 0 (more_balls_in_pits): 7 wins
+Heuristic 1 (mobility): 3 wins
+Heuristic 2 (extra_turn_potential): 3 wins
+Heuristic 3 (capture_potential): 3 wins
+Heuristic 4 (weighted_pit_value): 3 wins
+Ties: 1
+Total games: 20
+
+Now testing combined weighted heuristic against each individual heuristic...
+Combined vs h0: start 0 → wins 0, start 1 → wins 1
+
+--- Heuristic Win Summary ---
+Heuristic 0 (more_balls_in_pits): 7 wins
+Heuristic 1 (mobility): 3 wins
+Heuristic 2 (extra_turn_potential): 3 wins
+Heuristic 3 (capture_potential): 3 wins
+Heuristic 4 (weighted_pit_value): 3 wins
+Ties: 1
+Total games: 20
+
+Now testing combined weighted heuristic against each individual heuristic...
+Combined vs h0: start 0 → wins 0, start 1 → wins 1
+Heuristic 1 (mobility): 3 wins
+Heuristic 2 (extra_turn_potential): 3 wins
+Heuristic 3 (capture_potential): 3 wins
+Heuristic 4 (weighted_pit_value): 3 wins
+Ties: 1
+Total games: 20
+
+Now testing combined weighted heuristic against each individual heuristic...
+Combined vs h0: start 0 → wins 0, start 1 → wins 1
+Combined vs h1: start 0 → wins 0, start 1 → wins 0
+Combined vs h2: start 0 → wins 0, start 1 → wins 0
+Combined vs h3: start 0 → wins 0, start 1 → wins 0
+Total games: 20
+
+Now testing combined weighted heuristic against each individual heuristic...
+Combined vs h0: start 0 → wins 0, start 1 → wins 1
+Combined vs h1: start 0 → wins 0, start 1 → wins 0
+Combined vs h2: start 0 → wins 0, start 1 → wins 0
+Combined vs h3: start 0 → wins 0, start 1 → wins 0
+Combined vs h4: start 0 → wins 0, start 1 → wins 0
+
+Combined vs h1: start 0 → wins 0, start 1 → wins 0
+Combined vs h2: start 0 → wins 0, start 1 → wins 0
+Combined vs h3: start 0 → wins 0, start 1 → wins 0
+Combined vs h4: start 0 → wins 0, start 1 → wins 0
+
+--- Performance with Combined Heuristic ---
+Heuristic 0 (more_balls_in_pits): 1 wins
+Heuristic 1 (mobility): 0 wins
+Combined vs h4: start 0 → wins 0, start 1 → wins 0
+
+--- Performance with Combined Heuristic ---
+Heuristic 0 (more_balls_in_pits): 1 wins
+Heuristic 1 (mobility): 0 wins
+--- Performance with Combined Heuristic ---
+Heuristic 0 (more_balls_in_pits): 1 wins
+Heuristic 1 (mobility): 0 wins
+Heuristic 2 (extra_turn_potential): 0 wins
+Heuristic 3 (capture_potential): 0 wins
+Heuristic 2 (extra_turn_potential): 0 wins
+Heuristic 3 (capture_potential): 0 wins
+Heuristic 4 (weighted_pit_value): 0 wins
+Heuristic 4 (weighted_pit_value): 0 wins
+Heuristic combined (combined): 9 wins
+Ties: 0
+Total games: 10

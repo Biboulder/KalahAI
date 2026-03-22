@@ -204,7 +204,7 @@ class Kalah:
         h4 = self.weighted_pit_value(board, ai_player)
 
         # Simple weighted sum of heuristics (weights can be tuned).
-        return 0.4 * h0 + 0.15 * h1 + 0.1 * h2 + 0.1 * h3 + 0.25 * h4
+        return 0.70 * h0 + 0.05 * h1 + 0.10 * h2 + 0.10 * h3 + 0.05 * h4
 
     def heuristic(self, board, ai_player, val):
         """
