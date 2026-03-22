@@ -55,7 +55,6 @@ THe AI search strength is mainly controlled by the **depth** parameter passed to
 ## Heuristics
 The AI uses a heuristic evaluation function at the leaf nodes of the search tree.
 - In main.py, change heuristic_val to one of: `"0", "1", "2", "3", "4", or "combined"`
-- In gui.py, change `AI_HEURISTIC` to one of the same values.
 
 ## Tournament (testbench.py)
 To compare heuristics automatically:
