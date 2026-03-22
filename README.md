@@ -2,6 +2,15 @@
 
 A playable implementation of the board game **Kalah (Kalaha)** with an AI opponent using **Minimax with Alpha–Beta pruning**.
 
+## Requirements
+- Python 3.10+ recommended
+- Pygame (for GUI mode)
+
+Install pygame:
+```bash
+pip install pygame
+```
+
 ## Run CLI Version (main.py)
 ```bash
 python main.py
@@ -36,17 +45,23 @@ python gui.py
 ## AI Depth
 THe AI search strength is mainly controlled by the **depth** parameter passed to `minimax()`.
 - Where to change it:
-    - In main.py, look for the call to minimax(... depth=...) and modify the value.
-    - In gui.py, look for the AI function (e.g., `run_ai()`) and modify the depth value there as well.
+    - In main.py, edit the `DEPTH`
+    - In gui.py, edit the `AI_DEPTH`
 - Typical values:
     - depth = 4  -> fast
     - depth = 6  -> balanced
     - depth = 8+ -> stronger but may become slow depending on the machine
-## Requirements
-- Python 3.10+ recommended
-- Pygame (for GUI mode)
 
-Install pygame:
+## Heuristics
+The AI uses a heuristic evaluation function at the leaf nodes of the search tree.
+- In main.py, change heuristic_val to one of: `"0", "1", "2", "3", "4", or "combined"`
+- In gui.py, change `AI_HEURISTIC` to one of the same values.
+
+## Tournament (testbench.py)
+To compare heuristics automatically:
 ```bash
-pip install pygame
+python testbench.py
 ```
+
+## Attribution
+- `gui.py` is adapted from an existing Pygame Kalah GUI found online. We modified it to integrate with our `Kalah` game logic.

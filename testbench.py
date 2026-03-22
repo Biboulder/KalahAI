@@ -3,7 +3,14 @@ from minimax import minimax
 
 
 def play_game(heur0, heur1, starting_player, depth=6, verbose=False):
-    """Play a single game between two AIs that use different heuristics.
+    """
+    Play one game: two AIs play against each other with potentially different heuristics.
+    Parameters:
+    ----------
+    heur0, heur1: heuristic for player 0 and 1
+    starting_player: 0 or 1
+    depth: Minimax/alpha-beta search depth.
+    verbose: if True, print moves and board states
 
     Returns the winner (0, 1, or -1 for tie).
     """
@@ -11,9 +18,14 @@ def play_game(heur0, heur1, starting_player, depth=6, verbose=False):
     game = Kalah()
     game.current_player = starting_player
 
+    # Play until terminal state
     while not game.is_game_over(game.board):
         player = game.current_player
+
+        # Select heuristic based on which player is moving
         heur = heur0 if player == 0 else heur1
+        
+        # ai_player=player because each side is “the AI” in this test
         _, pit = minimax(game, game.board, player, depth, ai_player=player, heuristic_val=heur)
         game.move(pit)
         if verbose:
@@ -23,14 +35,25 @@ def play_game(heur0, heur1, starting_player, depth=6, verbose=False):
     return game.get_winner()
 
 def run_tournament(depth, verbose=False):
+    """
+    Tournament Part 1:
+    - Compare heuristics "0".."4" against each other
+    - Each unique pair plays 2 games (starting player swapped)
+
+    Tournament Part 2:
+    - Compare "combined" vs each heuristic "0".."4"
+    - Again, 2 games per matchup with swapped starting player
+    """
     heuristics = [str(i) for i in range(5)]
+    
+    # --- Part 1: pairwise tournament among 0..4 ---
     # Track wins per heuristic: stats[heuristic_id] = win count
     heuristic_names = ['more_balls_in_pits', 'mobility', 'extra_turn_potential', 'capture_potential', 'weighted_pit_value']
     stats = {str(i): 0 for i in range(5)}
     ties = 0
 
     for i in range(len(heuristics)):
-        for j in range(i + 1, len(heuristics)):  # Only play each unique pair once
+        for j in range(i + 1, len(heuristics)):  #unique pairs only
             h0 = heuristics[i]
             h1 = heuristics[j]
                 
@@ -61,9 +84,11 @@ def run_tournament(depth, verbose=False):
     print(f"Ties: {ties}")
     print(f"Total games: {sum(stats.values()) + ties}")
 
-    stats2 = {str(i): 0 for i in range(5)}
-    stats2['combined'] = 0
-    ties = 0  # Reset ties for combined tournament section
+    # --- Part 2: combined vs each heuristic 0..4 ---
+    combined_wins = {str(i): 0 for i in range(5)}
+    combined_wins['combined'] = 0
+    combined_ties = 0 
+    
     print(f"\nNow testing combined weighted heuristic against each individual heuristic...")
 
     for i in range(len(heuristics)):
@@ -71,28 +96,30 @@ def run_tournament(depth, verbose=False):
         winner0 = play_game('combined', heuristics[i], starting_player=0, depth=depth, verbose=verbose)
         winner1 = play_game('combined', heuristics[i], starting_player=1, depth=depth, verbose=verbose)
 
+        # Game 1: Starting with Player 0
         if winner0 == 0:
-            stats2['combined'] += 1  # combined won
+            combined_wins['combined'] += 1  # combined won
         elif winner0 == 1:
-            stats2[heuristics[i]] += 1  # individual heuristic won
+            combined_wins[heuristics[i]] += 1  # individual heuristic won
         elif winner0 == -1:
-            ties += 1  # tie
+            combined_ties += 1  # tie
 
+        # Game 2: Starting with Player 1
         if winner1 == 0:
-            stats2['combined'] += 1  # combined won
+            combined_wins['combined'] += 1  # combined won
         elif winner1 == 1:
-            stats2[heuristics[i]] += 1  # individual heuristic won
+            combined_wins[heuristics[i]] += 1  # individual heuristic won
         elif winner1 == -1:
-            ties += 1  # tie
+            combined_ties += 1  # tie
 
         print(f"Combined vs h{heuristics[i]}: start 0 → wins {winner0}, start 1 → wins {winner1}")
 
     print(f"\n--- Performance with Combined Heuristic ---")
-    for h_id, wins in stats2.items():
+    for h_id, wins in combined_wins.items():
         name = 'combined' if h_id == 'combined' else heuristic_names[int(h_id)]
         print(f"Heuristic {h_id} ({name}): {wins} wins")
-    print(f"Ties: {ties}")
-    print(f"Total games: {sum(stats2.values()) + ties}")
+    print(f"Ties: {combined_ties}")
+    print(f"Total games: {sum(combined_wins.values()) + combined_ties}")
     
     
 
