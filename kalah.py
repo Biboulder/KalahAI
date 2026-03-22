@@ -194,24 +194,13 @@ class Kalah:
         opp_score = weighted_sum([board[i] for i in opp_range], opp_weights)
         return own_score - opp_score
     
-    def combine_heuristics(self, board, ai_player):
-        """Combine multiple heuristics into one score.
-        """
-        h0 = self.more_balls_in_pits(board, ai_player)
-        h1 = self.mobility(board, ai_player)
-        h2 = self.extra_turn_potential(board, ai_player)
-        h3 = self.capture_potential(board, ai_player)
-        h4 = self.weighted_pit_value(board, ai_player)
 
-        # Simple weighted sum of heuristics (weights can be tuned).
-        return 0.4 * h0 + 0.15 * h1 + 0.1 * h2 + 0.1 * h3 + 0.25 * h4
-
-    def heuristic(self, board, ai_player, val):
+    def heuristic(self, board, ai_player, val, weights=None):
         """
         Dispatch method to select which heuristic to use.
 
         val can be:
-        "0", "1", "2", "3", "4", or "combined"
+        "0", "1", "2", "3", "4"
         """
         val = str(val)
         match val:
@@ -225,8 +214,14 @@ class Kalah:
                 return self.capture_potential(board, ai_player)
             case "4":
                 return self.weighted_pit_value(board, ai_player)
-            case "combined":
-                return self.combine_heuristics(board, ai_player)
+            case "weighted":
+                # uses custom weights passed from grid search
+                w = weights or (1, 0, 0, 0, 0)
+                return (w[0] * self.more_balls_in_pits(board, ai_player) +
+                        w[1] * self.mobility(board, ai_player) +
+                        w[2] * self.extra_turn_potential(board, ai_player) +
+                        w[3] * self.capture_potential(board, ai_player) +
+                        w[4] * self.weighted_pit_value(board, ai_player))
             case _:
                 raise ValueError(f"Unknown heuristic value: {val}")
     

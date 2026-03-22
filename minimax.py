@@ -1,6 +1,6 @@
 import math
 
-def minimax(game, board, player, depth, ai_player, heuristic_val, alpha=-math.inf, beta=math.inf):
+def minimax(game, board, player, depth, ai_player, heuristic_val, alpha=-math.inf, beta=math.inf, weights=None):
     """
     Minimax search with Alpha–Beta pruning.
 
@@ -30,7 +30,7 @@ def minimax(game, board, player, depth, ai_player, heuristic_val, alpha=-math.in
     
     # If game is finished OR we've reached depth limit, return heuristic evaluation.
     if game.is_game_over(board) or depth == 0:
-        return game.heuristic(board, ai_player, heuristic_val), None
+        return game.heuristic(board, ai_player, heuristic_val, weights), None
 
     best_move = None
 
@@ -43,7 +43,7 @@ def minimax(game, board, player, depth, ai_player, heuristic_val, alpha=-math.in
             new_board, new_player = game.apply_move(board, player, pit)
             
             # Recurse into the child state
-            val, _ = minimax(game, new_board, new_player, depth-1, ai_player, heuristic_val, alpha, beta)
+            val, _ = minimax(game, new_board, new_player, depth-1, ai_player, heuristic_val, alpha, beta, weights)
             
             # Keep the best move for MAX
             if val > best_val:
@@ -65,7 +65,7 @@ def minimax(game, board, player, depth, ai_player, heuristic_val, alpha=-math.in
         best_val = math.inf
         for pit in game.get_actions(board, player):
             new_board, new_player = game.apply_move(board, player, pit)
-            val, _ = minimax(game, new_board, new_player, depth-1, ai_player, heuristic_val, alpha, beta)
+            val, _ = minimax(game, new_board, new_player, depth-1, ai_player, heuristic_val, alpha, beta, weights)
                         
             # Keep the best move for MIN (minimum value for AI)
             if val < best_val:
