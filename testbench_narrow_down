@@ -1,0 +1,132 @@
+import time
+from kalah import Kalah
+from minimax import minimax
+
+DEPTH = 4 # Keep depth at 4
+MAX_STEP = 0.1
+MIN_STEP = 0.0125
+
+HEURISTIC_NAMES =['store_diff', 'mobility', 'extra_turn', 'capture', 'weighted_pits']
+
+def play_game_from_start(w0, w1, starting_player, depth=DEPTH):
+    """
+    Plays a game from the normal starting position.
+    w0 controls Player 0, w1 controls Player 1.
+    """
+    game = Kalah() # Initializes with the standard 4-seeds-per-pit board
+    game.current_player = starting_player
+
+    while not game.is_game_over(game.board):
+        player = game.current_player
+        weights = w0 if player == 0 else w1
+        
+        _, pit = minimax(game, game.board, player, depth,
+                         ai_player=player, heuristic_val='weighted',
+                         weights=weights)
+        if pit is None:
+            break
+        game.move(pit)
+
+    return game.get_winner()
+
+def get_all_weight_combinations(step):
+    """
+    Generates all combinations of 5 weights in increments of "step" that sum to 1.0.
+    """
+    steps = int(round(1.0 / step))
+    if abs((steps * step) - 1.0) > 1e-9:
+        raise ValueError(f"Step {step} does not evenly divide 1.0")
+
+    combinations =[]
+    
+    # 5 nested loops to find all combinations that sum to "steps"
+    for i in range(steps + 1):
+        for j in range(steps + 1 - i):
+            for k in range(steps + 1 - i - j):
+                for l in range(steps + 1 - i - j - k):
+                    m = steps - i - j - k - l
+                    
+                    # Convert steps back to percentages (0.00 to 1.00)
+                    w = (round(m * step, 6), 
+                         round(l * step, 6), 
+                         round(k * step, 6), 
+                         round(j * step, 6), 
+                         round(i * step, 6))
+                    combinations.append(w)
+                    
+    return combinations
+
+
+def find_combo_start_index(combinations, combo, tol=1e-9):
+    for idx, candidate in enumerate(combinations):
+        if all(abs(a - b) <= tol for a, b in zip(candidate, combo)):
+            return idx
+    return 0
+
+def run_exhaustive_search():
+    print(f"\n{'='*65}")
+    print(f"MULTI-STEP WEIGHT SEARCH (start={MAX_STEP}, min={MIN_STEP})")
+    print(f"Depth: {DEPTH}  |  Games per combination: 2 (Switching starts)")
+    print(f"{'='*65}")
+    
+    baseline = (1.0, 0.0, 0.0, 0.0, 0.0)
+    resume_combo = baseline
+
+    start_time = time.time()
+    step = MAX_STEP
+
+    while step >= (MIN_STEP - 1e-12):
+        combinations = get_all_weight_combinations(step)
+        total_combos = len(combinations)
+        start_idx = find_combo_start_index(combinations, resume_combo)
+
+        second_last_baseline = None
+
+        print(f"\nStep={step:.6f} | combinations={total_combos} | start_index={start_idx + 1}")
+
+        for idx in range(start_idx, total_combos):
+            combo = combinations[idx]
+            if combo == baseline:
+                continue
+
+            # Game 1: Eval AI plays Player 0, Baseline plays Player 1. Eval goes FIRST.
+            r1 = play_game_from_start(w0=combo, w1=baseline, starting_player=0, depth=DEPTH)
+
+            # Game 2: Eval AI plays Player 0, Baseline plays Player 1. Baseline goes FIRST.
+            r2 = play_game_from_start(w0=combo, w1=baseline, starting_player=1, depth=DEPTH)
+
+            # Calculate Score (Win = 1.0, Tie = 0.5, Loss = 0.0)
+            score = 0.0
+            if r1 == 0: score += 1.0      # Eval (P0) won Game 1
+            elif r1 == -1: score += 0.5   # Tie
+
+            if r2 == 0: score += 1.0      # Eval (P0) won Game 2
+            elif r2 == -1: score += 0.5   # Tie
+
+            # If challenger beats current baseline, baseline moves forward.
+            if score > 1.0:
+                second_last_baseline = baseline
+                baseline = combo
+                print(f"[{idx+1}/{total_combos}] New Baseline: {baseline} | Score: {score}/2.0")
+
+            # Print progress every 1000 combinations so you know it hasn't crashed
+            if (idx + 1) % 1000 == 0:
+                elapsed = time.time() - start_time
+                print(f"... Step {step:.6f}: processed {idx+1}/{total_combos} ({elapsed:.1f}s)")
+
+        # Next refined search resumes from the second-last baseline, if any.
+        if second_last_baseline is not None:
+            resume_combo = second_last_baseline
+        else:
+            resume_combo = baseline
+
+        step = round(step / 2.0, 10)
+
+    # --- Print Final Results ---
+    print(f"\n{'='*65}")
+    print(f"SEARCH COMPLETE in {time.time() - start_time:.1f} seconds")
+    print(f"{'='*65}")
+    print(f"Final Baseline: {baseline}")
+
+if __name__ == "__main__":
+    run_exhaustive_search()
